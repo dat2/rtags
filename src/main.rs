@@ -7,7 +7,6 @@ mod parsers;
 mod tag;
 
 use failure::Error;
-use parsers::TagParser;
 
 fn run() -> Result<(), Error> {
     let parser = parsers::detect("filename.js");

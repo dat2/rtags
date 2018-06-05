@@ -1,9 +1,18 @@
 use failure::Error;
 use regex::Regex;
+use std::path::Path;
 use tag::{ExCmd, Tag};
 
 pub trait TagParser {
     fn parse_tags(&self, s: &str) -> Result<Vec<Tag>, Error>;
+}
+
+struct NoOpTagParser;
+
+impl TagParser for NoOpTagParser {
+    fn parse_tags(&self, _: &str) -> Result<Vec<Tag>, Error> {
+        Ok(Vec::new())
+    }
 }
 
 struct JavaScriptTagParser {
@@ -37,8 +46,15 @@ impl TagParser for JavaScriptTagParser {
     }
 }
 
-pub fn detect(filename: &str) -> impl TagParser {
-    JavaScriptTagParser::new(filename)
+pub fn detect(filename: &str) -> Box<TagParser> {
+    let p = Path::new(filename);
+    match p.extension() {
+        None => Box::new(NoOpTagParser),
+        Some(os_str) => match os_str.to_str() {
+            Some("js") => Box::new(JavaScriptTagParser::new(filename)),
+            _ => Box::new(NoOpTagParser),
+        },
+    }
 }
 
 #[cfg(test)]
