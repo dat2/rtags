@@ -30,6 +30,41 @@ impl fmt::Display for Tag {
     }
 }
 
-fn main() {
+trait TagParser {
+    fn parse_tags(&self, s: &str) -> Vec<Tag>;
+}
 
+struct JavaScriptTagParser;
+
+impl JavaScriptTagParser {
+    fn new() -> JavaScriptTagParser {
+        JavaScriptTagParser
+    }
+}
+
+impl TagParser for JavaScriptTagParser {
+    fn parse_tags(&self, s: &str) -> Vec<Tag> {
+        Vec::new()
+    }
+}
+
+fn stringify_tags(tags: &[Tag]) -> String {
+    let mut result = String::new();
+    for tag in tags {
+        result.push_str(&format!("{}\n", tag));
+    }
+    result
+}
+
+fn main() {
+    let parser = JavaScriptTagParser::new();
+    let input_file = r"
+        const stuff = require('hello');
+        let x = {};
+        var hello = 123;
+        function x() {
+
+        }";
+    let tags = parser.parse_tags(input_file);
+    println!("{}", stringify_tags(&tags));
 }
