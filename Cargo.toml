@@ -1,6 +1,9 @@
 [package]
+authors = ["Nicholas Dujay <nickdujay@gmail.com>"]
 name = "rtags"
 version = "0.1.0"
-authors = ["Nicholas Dujay <nickdujay@gmail.com>"]
 
 [dependencies]
+failure = "0.1.1"
+lazy_static = "1.0.1"
+regex = "1.0.0"
