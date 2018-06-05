@@ -1,6 +1,6 @@
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum ExCmd {
     GCmd(String),
     QPattern(String),
@@ -17,7 +17,7 @@ impl fmt::Display for ExCmd {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Tag {
     pub name: String,
     pub filename: String,

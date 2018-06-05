@@ -12,7 +12,9 @@ struct JavaScriptTagParser {
 
 impl JavaScriptTagParser {
     fn new(filename: &str) -> JavaScriptTagParser {
-        JavaScriptTagParser { filename: filename.to_owned() }
+        JavaScriptTagParser {
+            filename: filename.to_owned(),
+        }
     }
 }
 
@@ -37,4 +39,22 @@ impl TagParser for JavaScriptTagParser {
 
 pub fn detect(filename: &str) -> impl TagParser {
     JavaScriptTagParser::new(filename)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn tags_are_parsed_correctly() {
+        let expected = vec![Tag {
+            name: "stuff".to_string(),
+            filename: "main.js".to_string(),
+            excmd: ExCmd::GCmd("^const stuff = {};$".to_string()),
+        }];
+        let parser = JavaScriptTagParser::new("main.js");
+        let file_contents = "const stuff = {};";
+        let actual = parser.parse_tags(file_contents).unwrap();
+        assert_eq!(actual, expected)
+    }
 }
